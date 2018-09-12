@@ -4,9 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{\%>\%}
-\alias{reexports}
 \alias{read.big.matrix}
-\alias{reexports}
 \alias{attach.big.matrix}
 \title{Objects exported from other packages}
 \keyword{internal}

@@ -25,5 +25,6 @@ Suggests: devtools,
     knitr,
     rmarkdown,
     testthat
+Encoding: UTF-8
 RoxygenNote: 6.1.0
 VignetteBuilder: knitr

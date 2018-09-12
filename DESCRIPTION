@@ -9,6 +9,7 @@ Description: Selecting linear and generalized linear models for large data sets
     modifications of Bayesian Information Criterion). Selection can be
     performed on data which exceed RAM capacity.
 License: GPL-3
+URL: http://github.com/pmszulc/bigstep
 Depends: R (>= 3.5.0)
 Imports: bigmemory,
     magrittr,

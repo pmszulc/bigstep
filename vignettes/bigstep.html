@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Piotr Szulc" />
+
+<meta name="date" content="2018-09-05" />
+
+<title>The stepwise procedure for big data</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">The stepwise procedure for big data</h1>
+<h4 class="author"><em>Piotr Szulc</em></h4>
+<h4 class="date"><em>2018-09-05</em></h4>
+
+
+
+<p>The main goal of the package <code>bigstep</code> is to allow you to select a regression model using the stepwise procedure when data is very big, potentially larger than available RAM in your computer. What is more, the package gives you a lot of control over how this procedure should look like. At this moment, you can use one of these functions: <code>stepwise</code>, <code>forward</code>, <code>backward</code>, <code>fast_forward</code>, <code>multi_backward</code> and combinations of them. They can be treated as blocks from which the whole procedure of finding the best model is built.</p>
+<div id="small-data" class="section level2">
+<h2>Small data</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># generate data</span>
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+n &lt;-<span class="st"> </span><span class="dv">200</span>
+p &lt;-<span class="st"> </span><span class="dv">20</span>
+X &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(n <span class="op">*</span><span class="st"> </span>p), <span class="dt">ncol =</span> p)
+<span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;X&quot;</span>, <span class="dv">1</span><span class="op">:</span>p)
+y &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.4</span> <span class="op">*</span><span class="st"> </span><span class="kw">rowSums</span>(X[, <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>)]) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n)</code></pre></div>
+<p>First, you have to convert your data to a proper format, an object of class <code>big</code>. It can be done using the function <code>prepare_data</code>. In most cases you will only need to specify a vector of responses, <code>y</code>, and a matrix of predictors, <code>X</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(bigstep)
+data &lt;-<span class="st"> </span><span class="kw">prepare_data</span>(y, X)</code></pre></div>
+<p>Then, you can use the stepwise procedure with, for example, Akaike Information Criterion and <code>summary</code> function to get more information about the final model.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw">stepwise</span>(data, <span class="dt">crit =</span> aic)
+results<span class="op">$</span>model
+<span class="kw">summary</span>(results)</code></pre></div>
+<p>You can use only one forward step (for example if you want to choose the best predictor).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">forward</span>(data, <span class="dt">crit =</span> aic)</code></pre></div>
+<p>What is important, results are in the same format as input data (class <code>big</code>), so you can use <code>forward</code> again or in combination with other functions (with different criteria if you like). The pipe (<code>%&gt;%</code>) operator will be helpful. For every step the actual number of variables in a model, mean squared error (<em>MSE</em>) or accuracy (<em>ACC</em>; if you use the logistic regression) and a value of the chosen criterion (<em>crit</em>) are given.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">forward</span>(aic) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">forward</span>(aic) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">forward</span>(aic) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">backward</span>(bic)</code></pre></div>
+<p>It may seem unnecessary or even unjustified for small data, but can be useful if you have a lot of predictors (see the next paragraph).</p>
+</div>
+<div id="bigger-data" class="section level2">
+<h2>Bigger data</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># generate data</span>
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+n &lt;-<span class="st"> </span><span class="fl">1e3</span>
+p &lt;-<span class="st"> </span><span class="fl">1e4</span>
+X &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(p <span class="op">*</span><span class="st"> </span>n), <span class="dt">ncol =</span> p)
+<span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;X&quot;</span>, <span class="dv">1</span><span class="op">:</span>p)
+Xadd &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">5</span> <span class="op">*</span><span class="st"> </span>n), n, <span class="dv">5</span>)  <span class="co"># additional variables</span>
+<span class="kw">colnames</span>(Xadd) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;Xadd&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)
+y &lt;-<span class="st"> </span><span class="fl">0.2</span> <span class="op">*</span><span class="st"> </span><span class="kw">rowSums</span>(X[, <span class="dv">1000</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)]) <span class="op">+</span><span class="st"> </span>Xadd[, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span> <span class="op">*</span><span class="st"> </span>Xadd[, <span class="dv">3</span>] <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n)</code></pre></div>
+<p>If you have a lot o predictors, it can be a good idea to remove those that are not related with <code>y</code>. You can do that using <code>reduce_matrix</code>. This function calculates p-values for the Pearson correlation test and every variable from <code>X</code> (separately). Variables with p-values larger than <code>minpv</code> will not be considered in the next steps (formally, they are removed from <code>candidates</code>, one of components of class <code>big</code>). Thanks to that, the whole stepwise procedure will be much quicker. What is more, <code>reduce_matrix</code> changes the order of predictors in such a way that at the beginning there will be variables with the smallest p-values. It is important if you want to use <code>fast_forward</code> function.</p>
+<p>Another problem is choosing an appropriate criterion to such data. Classical ones like AIC or BIC are bad choice because they will almost certainly select a model with too many variables<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. You can use modifications of them like mBIC<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, mBIC2<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>, mAIC or mAIC2. In brief, these criteria have much heavier penalty for the number of parameters, so they prefer smaller models than their classic versions.</p>
+<p>Additionally, in the example below we add variables from other matrix to a model (<code>Xadd</code>). It can be a good idea if there are predictors which are important for us and want them to remain at every stage of building the model.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">prepare_data</span>(y, X, <span class="dt">Xadd =</span> Xadd)
+data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">reduce_matrix</span>(<span class="dt">minpv =</span> <span class="fl">0.15</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">stepwise</span>(mbic) -&gt;
+<span class="st">  </span>results
+<span class="kw">summary</span>(results)
+
+data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">reduce_matrix</span>(<span class="fl">0.15</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">stepwise</span>(bic) <span class="co"># bad idea...</span></code></pre></div>
+<p>Sometimes it will be reasonable to start with a model with some good predictors and then use the stepwise procedure. It can be achieved if we use <code>fast_forward</code> which adds every variable that reduces a criterion (not necessarily the best one). It is important for that function to search for variables in a reasonable order (first, the most correlated with <code>y</code>), so you should use <code>fast_forward</code> after <code>reduce_matrix</code> (you can set <code>minpv = 1</code> if you do not want to remove any predictor, just change the order). It is good idea to run <code>fast_forward</code> with a criterion which does not have a heavy penalty for the size of a model, so for example BIC is better than mBIC. After adding a lot of variables, most of them will be useless, so it can be a good idea to perform the backward elimination—as long as there are variables reducing a criterion. Run <code>multi_bacward</code> to do that.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">reduce_matrix</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">fast_forward</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">multi_backward</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">stepwise</span>()</code></pre></div>
+<p>If you are lucky, you do not have to run <code>stepwise</code> after <code>fast_forward</code> and <code>multi_backward</code> because you will already have the best model. It is important because <code>stepwise</code> consists of potentially many <code>backward</code> and <code>forward</code> steps and <code>forward</code> takes most time in whole procedure of building a model (we have to check every predictor to find the best one). So the fewer such steps, the faster you will get the model. It can be crucial if you have big data.</p>
+</div>
+<div id="big-data" class="section level2">
+<h2>Big data</h2>
+<p>Now, let consider data which is larger than RAM you have in your computer. It is impossible to read it in a normal way, but in a process of building regression model it is not necessary to have access to all predictors at the same time. Instead, you can read only a part of the matrix <code>X</code>, check all variables from that part and then read another one. To do that, you only need to read the matrix <code>X</code> using <code>read.big.matrix</code> from <code>bigmemory</code> package. The <code>prepare_data</code> function has a parameter <code>maxp</code> which represents the maximum size (that is the number of elements) of one part. If <code>X</code> is bigger, it will be splitted. It will be done even if your matrix is big but you have enough RAM to read it in a normal way. It may seem unnecessary, but it is worth to do because R is not very efficient in dealing with big matrices. Remember that <code>maxp</code> cannot be smaller than the number of observations (rows in <code>X</code>), by default it is 1e6.</p>
+<p>In the code below we assume that you have a big matrix in a file <em>X.txt</em>. Reading such matrix can be slow, but if you set <code>backingfile</code> and <code>descriptorfile</code> you have to do that once and next time you can use <code>attach.big.matrix</code> which is much faster.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Xbig &lt;-<span class="st"> </span><span class="kw">read.big.matrix</span>(<span class="st">&quot;X.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>,
+                        <span class="dt">backingfile =</span> <span class="st">&quot;X.bin&quot;</span>, <span class="dt">descriptorfile =</span> <span class="st">&quot;X.desc&quot;</span>)
+<span class="co"># Xbig &lt;- attach.big.matrix(&quot;X.desc&quot;) # much faster</span>
+y &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;y.txt&quot;</span>)
+<span class="co"># data &lt;- prepare_data(y, Xbig) # slow because of checking NA</span>
+data &lt;-<span class="st"> </span><span class="kw">prepare_data</span>(y, Xbig, <span class="dt">na =</span> <span class="ot">FALSE</span>) <span class="co"># set if you know that you do not have NA</span>
+data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">reduce_matrix</span>(<span class="dt">minpv =</span> <span class="fl">0.001</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">fast_forward</span>(<span class="dt">crit =</span> bic, <span class="dt">maxf =</span> <span class="dv">50</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">multi_backward</span>(<span class="dt">crit =</span> mbic) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">stepwise</span>(<span class="dt">crit =</span> mbic) -&gt;<span class="st"> </span>m
+<span class="kw">summary</span>(m)</code></pre></div>
+<p>We set <code>minpv</code> to a low value to speed up the whole procedure, but be careful because you can lose some important predictors.</p>
+</div>
+<div id="own-criteria" class="section level2">
+<h2>Own criteria</h2>
+<p>You can easily define your own criterion. It can depend on log-likelihood (<code>loglik</code>), the number of observations (<code>n</code>), the number of all variables (<code>p</code>), the number of variables currently in a model (<code>k</code>), the matrix with variables which are currently in a model (<code>Xm</code>) and constants. These parameters will be sent to your criterion, exactly with such names (but you do not have to use all).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_crit &lt;-<span class="st"> </span><span class="cf">function</span>(loglik, k, n, <span class="dt">c1 =</span> <span class="fl">0.5</span>, <span class="dt">c2 =</span> <span class="dv">8</span>) {
+  <span class="op">-</span>c1<span class="op">*</span>loglik <span class="op">+</span><span class="st"> </span><span class="dv">10</span><span class="op">*</span><span class="kw">sqrt</span>(k<span class="op">*</span>c2)
+}
+m &lt;-<span class="st"> </span><span class="kw">reduce_matrix</span>(data, <span class="dt">minpv =</span> <span class="fl">0.15</span>) <span class="co"># data from the paragraph &quot;Bigger data&quot;</span>
+<span class="kw">stepwise</span>(m, <span class="dt">crit =</span> my_crit)
+<span class="kw">stepwise</span>(m, <span class="dt">crit =</span> <span class="cf">function</span>(loglik, k, n) <span class="op">-</span><span class="fl">0.4</span><span class="op">*</span>loglik <span class="op">+</span><span class="st"> </span><span class="dv">10</span><span class="op">*</span><span class="kw">sqrt</span>(k<span class="op">*</span><span class="dv">8</span>))</code></pre></div>
+<p>Because your criterion has access to a model matrix (<code>Xm</code>), you can use untypical ones which depend, for example, on the average correlation between variables which are in a model.</p>
+</div>
+<div id="general-linear-models" class="section level2">
+<h2>General linear models</h2>
+<p>The package allows you to fit logistic and Poisson models. All you need to do is setting the parameter <code>type</code> when you prepare data. Take note that the <code>reduce_matrix</code> function always calculates the Pearson correlation, even if you use general linear models.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Poisson model</span>
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+n &lt;-<span class="st"> </span><span class="dv">50</span>
+p &lt;-<span class="st"> </span><span class="dv">1000</span>
+X &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">runif</span>(n <span class="op">*</span><span class="st"> </span>p), <span class="dt">ncol =</span> p)
+<span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;X&quot;</span>, <span class="dv">1</span><span class="op">:</span>p)
+mu &lt;-<span class="st"> </span><span class="kw">rowSums</span>(X[, <span class="dv">100</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)])
+y &lt;-<span class="st"> </span><span class="kw">rpois</span>(n, <span class="kw">exp</span>(mu))
+data1 &lt;-<span class="st"> </span><span class="kw">prepare_data</span>(y, X, <span class="dt">type =</span> <span class="st">&quot;linear&quot;</span>)
+data2 &lt;-<span class="st"> </span><span class="kw">prepare_data</span>(y, X, <span class="dt">type =</span> <span class="st">&quot;poisson&quot;</span>)
+data1 <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">reduce_matrix</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">stepwise</span>() <span class="co"># did not see any variables</span>
+data2 <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">reduce_matrix</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">stepwise</span>()
+
+<span class="co"># logistic model</span>
+<span class="kw">set.seed</span>(<span class="dv">2</span>)
+n &lt;-<span class="st"> </span><span class="dv">100</span>
+X &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">runif</span>(n <span class="op">*</span><span class="st"> </span>p, <span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>), <span class="dt">ncol =</span> p)
+<span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;X&quot;</span>, <span class="dv">1</span><span class="op">:</span>p)
+mu &lt;-<span class="st"> </span><span class="fl">0.8</span> <span class="op">*</span><span class="st"> </span><span class="kw">rowSums</span>(X[, <span class="dv">100</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)])
+prob &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span>( <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span>mu))
+y &lt;-<span class="st"> </span><span class="kw">rbinom</span>(n, <span class="dv">1</span>, prob)
+data1 &lt;-<span class="st"> </span><span class="kw">prepare_data</span>(y, X, <span class="dt">type =</span> <span class="st">&quot;linear&quot;</span>)
+data2 &lt;-<span class="st"> </span><span class="kw">prepare_data</span>(y, X, <span class="dt">type =</span> <span class="st">&quot;logistic&quot;</span>)
+data1 <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">reduce_matrix</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">stepwise</span>()
+data2 <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">reduce_matrix</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">stepwise</span>()</code></pre></div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>M. Bogdan, J.K. Ghosh, M. Zak-Szatkowska. <em>Selecting explanatory variables with the modified version of Bayesian Information Criterion</em>. Quality and Reliability Engineering International, 24:989–999, 2008.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>M. Bogdan, J.K. Ghosh, R.W. Doerge. <em>Modifying the Schwarz Bayesian Information Criterion to locate multiple interacting quantitative trait loci</em>. Genetics, 167:989–999, 2004.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>F. Frommlet, A. Chakrabarti, M. Murawska, M. Bogdan. <em>Asymptotic Bayes optimality under sparsity for general distributions under the alternative</em>, Technical report, arXiv:1005.4753v2, 2011.<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

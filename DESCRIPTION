@@ -1,0 +1,27 @@
+Package: bigstep
+Type: Package
+Title: Stepwise Selection for Large Data Sets
+Version: 0.8.1
+Date: 2018-8-30
+Authors@R: person("Piotr", "Szulc", email = "piotr.michal.szulc@gmail.com", role = c("aut", "cre"))
+Description: Selecting linear and generalized linear models for large data sets
+    using modified stepwise procedure and modern selection criteria (like
+    modifications of Bayesian Information Criterion). Selection can be
+    performed on data which exceed RAM capacity.
+License: GPL-3
+Depends: R (>= 3.5.0)
+Imports: bigmemory,
+    magrittr,
+    matrixStats,
+    methods,
+    R.utils,
+    RcppEigen,
+    speedglm,
+    stats,
+    utils
+Suggests: devtools,
+    knitr,
+    rmarkdown,
+    testthat
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr

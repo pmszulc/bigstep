@@ -32,7 +32,7 @@ to read it in a normal way. It may seem unnecessary, but it is worth to do
 because R is not very efficient in dealing with big matrices.
 
 Another problem with a large number of predictors is choosing an appropriate
-criterion. Classical ones like AIC or BIC are bad choise because they will
+criterion. Classical ones like AIC or BIC are bad choice because they will
 almost certainly select a model with two many variables [1]. You can use
 modifications of them like mBIC [2], mBIC2 [3], mAIC or mAIC2. In brief,
 these criteria have much heavier penalty for the number of parameters, so

@@ -2,7 +2,7 @@
 #'
 #' Add variables to a model as long as they reduce the given criterion.
 #' Variables are searched according to \code{candidates} and every one which
-#' reduces the criterion is added (not neccesarily the best one).
+#' reduces the criterion is added (not necessarily the best one).
 #'
 #' @inheritParams forward
 #' @param maxf a numeric, a maximal number of variables in the final model.

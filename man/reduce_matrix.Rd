@@ -18,8 +18,8 @@ An object of class \code{big}.
 \description{
 Perform the Pearson correlation tests between a vector \code{y} and every
 variable from a matrix \code{X} (separately) and remove uncorrelated
-variables. The funcion is much faster when you do not have any missing values
-(set \code{na = FALSE} in \code{prepare_data} in that case).
+variables. The function is much faster when you do not have any missing
+values (set \code{na = FALSE} in \code{prepare_data} in that case).
 }
 \details{
 Type \code{browseVignettes("bigstep")} for more details.

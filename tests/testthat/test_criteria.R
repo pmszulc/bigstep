@@ -4,7 +4,7 @@ test_that("Right values", {
   expect_equal(aic(0, 0), 0)
   expect_equal(aic(-5, 2), 14)
   expect_equal(bic(-5, 0, 10), 10)
-  expect_equal(maic(-1, 5, p = 8), 12)
+  expect_equal(maic(-1, 5, p = 8, const = 4), 12)
 })
 
 test_that("Right equalities", {
@@ -12,7 +12,7 @@ test_that("Right equalities", {
   expect_equal(mbic2(9.9, 1, 100, 20), mbic(9.9, 1, 100, 20))
   expect_equal(mbic2(-1, 151, 1e3, 1e4),
                mbic(-1, 151, 1e3, 1e4) - 2*log(factorial(151)))
-  expect_equal(maic2(0.1, 1, 1e5), maic(0.1, 1, 1e5))
+  expect_equal(maic2(0.1, 1, 10, 1e5), maic(0.1, 1, 1e5))
 })
 
 test_that("Right inequalities", {
@@ -20,9 +20,9 @@ test_that("Right inequalities", {
   expect_true(aic(8.5, 5) < bic(8.5, 5, 8))
   expect_true(mbic(-8.5, 8, 100, 20) > bic(-8.5, 8, 100))
   expect_true(mbic2(-8.5, 8, 100, 20) < mbic(-8.5, 8, 100, 20))
-  expect_true(mbic2(10, 500, 100, 1e10) < mbic2(10, 500, 101, 1e10))
-  expect_true(maic2(-8.5, 8, 100, 20) < maic(-8.5, 8, 100, 20))
-  expect_true(maic2(10, 500, 1e10) < maic2(10, 501, 1e10))
+  expect_true(mbic2(10, 50, 100, 1e10) < mbic2(10, 50, 101, 1e10))
+  expect_true(maic2(-8.5, 8, 100, 20) < maic(-8.5, 8, 20))
+  expect_true(maic2(10, 50, 100, 1e10) < maic2(10, 51, 100, 1e10))
 
   set.seed(1)
   n <- 30
@@ -48,5 +48,7 @@ test_that("Errors", {
   expect_error(mbic2(0, 2, 20, p = 3), "p/const > 1 is not TRUE")
   expect_error(mbic2(0, 6, 20, p = 5), "p/k >= 1 is not TRUE")
   expect_error(mbic2(0, 1000, 0, 300), "n > 0 is not TRUE")
-  expect_error(maic2(-20, 10, 0), "p > 0 is not TRUE")
+  expect_error(maic2(-20, 10, 100, 0), "p > 0 is not TRUE")
+  expect_equal(mbic2(-20, 80, 100, 200), Inf)
+  expect_equal(maic2(-20, 80, 1000, 159), Inf)
 })

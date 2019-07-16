@@ -1,6 +1,6 @@
 context("All steps")
 
-library(bigmemory)
+library("bigmemory")
 set.seed(1)
 n <- 100
 p <- 10
@@ -18,18 +18,17 @@ test_that("Typical data", {
   expect_equal(stepwise(d, aic)$model, paste0("X", c(10, 6, 2, 1)))
   expect_equal(stepwise(d, mbic2, const = 4)$model, paste0("X", c(10, 6, 2)))
   expect_equal(stepwise(d, mbic2, const = 4.5)$model, paste0("X", c(10, 6, 2, 1)))
-  expect_equal(stepwise(d, mbic2, const = 5)$model, paste0("X", c(10, 6, 2, 1, 9)))
-  expect_equal(stepwise(d, mbic2, const = 10)$model,
-               paste0("X", c(10, 6, 2, 1, 9, 8, 5, 7, 3, 4)))
+  # expect_equal(stepwise(d, mbic2, const = 5)$model, paste0("X", c(10, 6, 2, 1, 9)))
+  # now we don't get this model for mbic2 because k > p/2
 
   m <- d %>%
-    fast_forward(mbic2, const = 10) %>%
+    fast_forward(mbic, const = 10) %>%
     multi_backward()
   expect_equal(m$model, paste0("X", c(2, 6, 10)))
   m <- d %>%
-    fast_forward(mbic2, const = 10) %>%
+    fast_forward(mbic, const = 10) %>%
     stepwise() %>%
-    forward(crit = maic2) %>%
+    forward(crit = maic) %>%
     fast_forward() %>%
     backward() %>%
     backward() %>%
@@ -100,18 +99,15 @@ test_that("Bigmemory", {
   expect_equal(stepwise(d, aic)$model, paste0("X", c(10, 6, 2, 1)))
   expect_equal(stepwise(d, mbic2, const = 4)$model, paste0("X", c(10, 6, 2)))
   expect_equal(stepwise(d, mbic2, const = 4.5)$model, paste0("X", c(10, 6, 2, 1)))
-  expect_equal(stepwise(d, mbic2, const = 5)$model, paste0("X", c(10, 6, 2, 1, 9)))
-  expect_equal(stepwise(d, mbic2, const = 10)$model,
-               paste0("X", c(10, 6, 2, 1, 9, 8, 5, 7, 3, 4)))
 
   m <- d %>%
-    fast_forward(mbic2, const = 10) %>%
+    fast_forward(mbic, const = 10) %>%
     multi_backward()
   expect_equal(m$model, paste0("X", c(2, 6, 10)))
   m <- d %>%
-    fast_forward(mbic2, const = 10) %>%
+    fast_forward(mbic, const = 10) %>%
     stepwise() %>%
-    forward(crit = maic2) %>%
+    forward(crit = maic) %>%
     fast_forward() %>%
     backward() %>%
     backward() %>%

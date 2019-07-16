@@ -4,12 +4,15 @@
 \alias{maic2}
 \title{mAIC2}
 \usage{
-maic2(loglik, k, p, const = 4)
+maic2(loglik, k, n, p, const = 0.5)
 }
 \arguments{
 \item{loglik}{A numeric, the log-likelihood.}
 
 \item{k}{An integer >= 0, the number of selected variables.}
+
+\item{n}{An integer > 0, the number of observations, used only to check if k
+is not too large.}
 
 \item{p}{An integer > 0, the number of all variables or a weight.}
 

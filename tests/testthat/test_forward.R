@@ -1,5 +1,6 @@
 context("Forward")
 
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(1)
 n <- 30
 p <- 10
@@ -69,6 +70,7 @@ test_that("Rare situations", {
   d <- prepare_data(y, X)
   expect_equal(colnames(fast_forward(d, maxf = 2)$Xm)[-1], c("2", "3"))
 
+  suppressWarnings(RNGversion("3.5.0"))
   set.seed(1)
   n <- 100
   p <- 10

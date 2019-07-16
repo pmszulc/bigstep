@@ -1,5 +1,6 @@
 context("Backward")
 
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(1)
 n <- 30
 p <- 10

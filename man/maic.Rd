@@ -4,7 +4,7 @@
 \alias{maic}
 \title{mAIC}
 \usage{
-maic(loglik, k, p, const = 4)
+maic(loglik, k, p, const = 0.5)
 }
 \arguments{
 \item{loglik}{A numeric, the log-likelihood.}

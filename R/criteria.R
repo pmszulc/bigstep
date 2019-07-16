@@ -63,10 +63,14 @@ mbic <- function(loglik, k, n, p, const = 4) {
 
 mbic2 <- function(loglik, k, n, p, const = 4) {
   stopifnot(n > 0, k >= 0, p > 0, p/const > 1, p/k >= 1)
-  penalty <- ifelse(k < 150, 2*log(factorial(k)), 2*sum(log(1:k)))
-  # if k > 170, factorial(k) = Inf
-  mbic2_v <- mbic(loglik, k, n, p, const) - penalty
-  return(mbic2_v)
+  if ((k > p / 2) || (k > 3 * n / 4))  {
+    return(Inf) # model size out of reasonable bounds
+  } else {
+    penalty <- ifelse(k < 150, 2*log(factorial(k)), 2*sum(log(1:k)))
+    # if k > 170, factorial(k) = Inf
+    mbic2_v <- mbic(loglik, k, n, p, const) - penalty
+    return(mbic2_v)
+  }
 }
 
 #' mAIC
@@ -81,7 +85,7 @@ mbic2 <- function(loglik, k, n, p, const = 4) {
 #' maic(10, 5, 100, 50)
 #' @export
 
-maic <- function(loglik, k, p, const = 4) {
+maic <- function(loglik, k, p, const = 0.5) {
   stopifnot(p > 0, p/const > 1, p/k >= 1)
   maic_v <- aic(loglik, k) + 2*k*log(p/const - 1)
   return(maic_v)
@@ -93,15 +97,21 @@ maic <- function(loglik, k, p, const = 4) {
 #' Criterion).
 #'
 #' @inheritParams maic
+#' @param n An integer > 0, the number of observations, used only to check if k
+#'   is not too large.
 #' @return A number, a value of mAIC2.
 #' @examples
 #' maic2(10, 5, 100, 50)
 #' @export
 
-maic2 <- function(loglik, k, p, const = 4) {
-  stopifnot(p > 0, p/const > 1, k >= 0, p/k >= 1)
-  penalty <- ifelse(k < 150, 2*log(factorial(k)), 2*sum(log(1:k)))
-  # if k > 170, factorial(k) = Inf
-  maic2_v <- maic(loglik, k, p, const) - penalty
-  return(maic2_v)
+maic2 <- function(loglik, k, n, p, const = 0.5) {
+  stopifnot(n > 0, k >= 0, p > 0, p/const > 1, p/k >= 1)
+  if ((k > p / 2) || (k > 3 * n / 4))  {
+    return(Inf) # model size out of reasonable bounds
+  } else {
+    penalty <- ifelse(k < 150, 2*log(factorial(k)), 2*sum(log(1:k)))
+    # if k > 170, factorial(k) = Inf
+    maic2_v <- maic(loglik, k, p, const) - penalty
+    return(maic2_v)
+  }
 }

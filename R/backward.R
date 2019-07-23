@@ -38,7 +38,8 @@ backward <- function(data, crit = mbic, ...) {
   data$model <- colnames(Xm)[-1]
 
   loglik <- loglik(y, Xm, fit_fun, na)
-  crit_v <- R.utils::doCall(crit, loglik = loglik, n = n, k = k, p = p, Xm = Xm, ...)
+  crit_v <- R.utils::doCall(crit, loglik = loglik, n = n, k = k - s, p = p,
+                            Xm = Xm, ...)
   data$crit <- crit_v
 
   if (k == s) {
@@ -51,8 +52,8 @@ backward <- function(data, crit = mbic, ...) {
   for (i in (s + 1):k) {
     Xm_new <- Xm[, -i, drop = FALSE]
     loglik <- loglik(y, Xm_new, fit_fun, na)
-    crit_v_new[i - s] <- R.utils::doCall(crit, loglik = loglik, n = n, k = k - 1,
-                                         p = p, Xm = Xm_new, ...)
+    crit_v_new[i - s] <- R.utils::doCall(crit, loglik = loglik, n = n,
+                                         k = k - 1 - s, p = p, Xm = Xm_new, ...)
   }
 
   remove <- which.min(crit_v_new)
@@ -62,7 +63,7 @@ backward <- function(data, crit = mbic, ...) {
     data$metric_v <- metric(data)
     if (verb & !data$stepwise) message("Variable ", colnames(Xm)[remove + s],
       " removed with crit = ", round(crit_v_new[remove], 2), ", ", metric, " = ",
-      round(data$metric_v, 2), ".")
+      round(data$metric_v, 3), ".")
   } else {
     if (verb & !data$stepwise) message("There are no variables reducing crit.")
     data$crit <- crit_v

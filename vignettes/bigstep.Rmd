@@ -48,7 +48,7 @@ results$model
 summary(results)
 ```
 
-You can use only one forward step (for example if you want to choose the best predictor).
+If you want, you can use only one forward step (for example to choose the best predictor).
 
 ```{r}
 forward(data, crit = aic)
@@ -84,7 +84,7 @@ If you have a lot o predictors, it can be a good idea to remove those that are n
 
 Another problem is choosing an appropriate criterion to such data. Classical ones like AIC or BIC are bad choice because they will almost certainly select a model with too many variables^[M. Bogdan, J.K. Ghosh, M. Zak-Szatkowska. *Selecting explanatory variables with the modified version of Bayesian Information Criterion*. Quality and Reliability Engineering International, 24:989–999, 2008.]. You can use modifications of them like mBIC^[M. Bogdan, J.K. Ghosh, R.W. Doerge. *Modifying the Schwarz Bayesian Information Criterion to locate multiple interacting quantitative trait loci*. Genetics, 167:989–999, 2004.], mBIC2^[F. Frommlet, A. Chakrabarti, M. Murawska, M. Bogdan. *Asymptotic Bayes optimality under sparsity for general distributions under the alternative*, Technical report, arXiv:1005.4753v2, 2011.], mAIC or mAIC2. In brief, these criteria have much heavier penalty for the number of parameters, so they prefer smaller models than their classic versions.
 
-Additionally, in the example below we add variables from other matrix to a model (`Xadd`). It can be a good idea if there are predictors which are important for us and want them to remain at every stage of building the model.
+Additionally, in the example below we add variables from other matrix to a model (`Xadd`). They will not be removed in any step. It can be a good idea if there are predictors which are important for us and want them to remain at every stage of building the model.
 
 ```{r}
 data <- prepare_data(y, X, Xadd = Xadd)
@@ -136,7 +136,7 @@ We set `minpv` to a low value to speed up the whole procedure, but be careful be
 
 ## Own criteria
 
-You can easily define your own criterion. It can depend on log-likelihood (`loglik`), the number of observations (`n`), the number of all variables (`p`), the number of variables currently in a model (`k`), the matrix with variables which are currently in a model (`Xm`) and constants. These parameters will be sent to your criterion, exactly with such names (but you do not have to use all).
+You can easily define your own criterion. It can depend on log-likelihood (`loglik`), the number of observations (`n`), the number of all variables (`p`), the number of variables currently in a model (`k`; intercept and variables from `Xadd` are not counted), the matrix with variables which are currently in a model (`Xm`) and constants. These parameters will be sent to your criterion, exactly with such names (but you do not have to use all).
 
 ```{r}
 my_crit <- function(loglik, k, n, c1 = 0.5, c2 = 8) {

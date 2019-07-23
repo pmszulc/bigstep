@@ -12,7 +12,7 @@ d$Xm <- cbind(1, X[, c(2:3, 6:7)])
 
 Xm <- cbind(1, X[, c(2, 3, 6)])
 loglik <- loglik(y, Xm)
-bic_v <- bic(loglik, k = 4, n = n)
+bic_v <- bic(loglik, k = 3, n = n)
 
 test_that("Right variable to remove", {
   res <- backward(d, crit = bic)

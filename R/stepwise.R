@@ -35,16 +35,19 @@ stepwise <- function(data, crit = mbic, ...) {
 
   n <- length(y)
   k <- ncol(Xm)
-  p <- ncol(data$X) + length(data$stay)
+  s <- length(data$stay)
+  p <- ncol(data$X) + s
   data$stepwise <- TRUE
   data$model <- colnames(Xm)[-1]
 
   loglik <- loglik(y, Xm, fit_fun, na)
-  crit_v <- R.utils::doCall(crit, loglik = loglik, n = n, k = k, p = p, Xm = Xm, ...)
+  crit_v <- R.utils::doCall(crit, loglik = loglik, n = n, k = k - s, p = p,
+                            Xm = Xm, ...)
   data$crit <- crit_v
 
   if (verb) message("Starting stepwise, ", k - 1, " variables, crit = ",
-                    round(crit_v, 2), ", ", metric, " = ", round(metric(data), 2), ".")
+                    round(crit_v, 2), ", ", metric, " = ",
+                    round(metric(data), 3), ".")
 
   repeat {
     model <- data$model
@@ -57,12 +60,12 @@ stepwise <- function(data, crit = mbic, ...) {
         data <- data_f
         if (verb) message("Variable ", setdiff(data$model, model),
           " added with crit = ", round(data$crit, 2), ", ", metric, " = ",
-          round(data$metric_v, 2), ".")
+          round(data$metric_v, 3), ".")
       } else {
         data <- data_b
         if (verb) message("Variable ", setdiff(model, data$model),
           " removed with crit = ", round(data$crit, 2), ", ", metric, " = ",
-          round(data$metric_v, 2), ".")
+          round(data$metric_v, 3), ".")
       }
     } else break
   }

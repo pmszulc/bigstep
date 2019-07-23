@@ -35,7 +35,8 @@ fast_forward <- function(data, crit = bic, ..., maxf = 70) {
 
   n <- length(y)
   k <- ncol(Xm)
-  p <- ncol(X) + length(data$stay)
+  s <- length(data$stay)
+  p <- ncol(X) + s
   lcan <- length(candidates)
   data$model <- colnames(Xm)[-1]
 
@@ -46,12 +47,13 @@ fast_forward <- function(data, crit = bic, ..., maxf = 70) {
 
   if (maxf > lcan) maxf <- lcan
   loglik <- loglik(y, Xm, fit_fun, na)
-  crit_v <- R.utils::doCall(crit, loglik = loglik, n = n, k = k, p = p, Xm = Xm, ...)
+  crit_v <- R.utils::doCall(crit, loglik = loglik, n = n, k = k - s, p = p,
+                            Xm = Xm, ...)
   data$crit <- crit_v
 
   if (verb)
     message("Starting the fast-forward, ", k - 1, " variables, crit = ",
-            round(crit_v, 2), ", ", metric, " = ", round(metric(data), 2), ".")
+            round(crit_v, 2), ", ", metric, " = ", round(metric(data), 3), ".")
   add <- NULL
   parts <- create_parts(candidates, n, maxp)
   for (j in seq_along(parts)) {
@@ -60,7 +62,7 @@ fast_forward <- function(data, crit = bic, ..., maxf = 70) {
     for (i in seq_along(vars)) {
       Xm_new <- cbind(Xm, XX[, i, drop = FALSE])
       loglik <- loglik(y, Xm_new, fit_fun, na)
-      crit_v_new <- R.utils::doCall(crit, loglik = loglik, n = n, k = k + 1,
+      crit_v_new <- R.utils::doCall(crit, loglik = loglik, n = n, k = k + 1 - s,
                                     p = p, Xm = Xm, ...)
       if (crit_v_new < crit_v) {
         add <- c(add, vars[i])
@@ -72,7 +74,8 @@ fast_forward <- function(data, crit = bic, ..., maxf = 70) {
         data$metric_v <- metric(data)
         if (verb)
           message("Variable ", colnames(Xm)[k], " added with crit = ",
-                  round(crit_v, 2), ", ", metric, " = ", round(data$metric_v, 2), ".")
+                  round(crit_v, 2), ", ", metric, " = ",
+                  round(data$metric_v, 3), ".")
         if (length(add) == maxf) {
           if (verb) message("Done.\n")
           return(invisible(data))

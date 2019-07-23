@@ -17,7 +17,7 @@ test_that("Typical data", {
   expect_equal(stepwise(d)$model, paste0("X", c(10, 6, 2)))
   expect_equal(stepwise(d, aic)$model, paste0("X", c(10, 6, 2, 1)))
   expect_equal(stepwise(d, mbic2, const = 4)$model, paste0("X", c(10, 6, 2)))
-  expect_equal(stepwise(d, mbic2, const = 4.5)$model, paste0("X", c(10, 6, 2, 1)))
+  expect_equal(stepwise(d, mbic2, const = 5)$model, paste0("X", c(10, 6, 2, 1)))
   # expect_equal(stepwise(d, mbic2, const = 5)$model, paste0("X", c(10, 6, 2, 1, 9)))
   # now we don't get this model for mbic2 because k > p/2
 
@@ -66,7 +66,7 @@ test_that("Typical data + Xadd", {
   expect_equal(stepwise(d)$model, c("Xadd1", "Xadd2", paste0("X", c(10, 2))))
   expect_equal(stepwise(d, crit = aic)$model, c("Xadd1", "Xadd2", paste0("X", c(10, 2, 6))))
   expect_equal(stepwise(d, mbic2, const = 3)$model, c("Xadd1", "Xadd2", paste0("X", c(10, 2))))
-  expect_equal(stepwise(d, mbic2, const = 4)$model,
+  expect_equal(stepwise(d, mbic2, const = 6)$model,
                c("Xadd1", "Xadd2", paste0("X", c(10, 2, 6))))
 
   m <- d %>%
@@ -98,7 +98,7 @@ test_that("Bigmemory", {
   expect_equal(stepwise(d)$model, paste0("X", c(10, 6, 2)))
   expect_equal(stepwise(d, aic)$model, paste0("X", c(10, 6, 2, 1)))
   expect_equal(stepwise(d, mbic2, const = 4)$model, paste0("X", c(10, 6, 2)))
-  expect_equal(stepwise(d, mbic2, const = 4.5)$model, paste0("X", c(10, 6, 2, 1)))
+  expect_equal(stepwise(d, mbic2, const = 5)$model, paste0("X", c(10, 6, 2, 1)))
 
   m <- d %>%
     fast_forward(mbic, const = 10) %>%

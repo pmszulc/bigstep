@@ -43,11 +43,13 @@ forward <- function(data, crit = mbic, ...) {
 
   n <- length(y)
   k <- ncol(Xm)
-  p <- ncol(X) + length(data$stay)
+  s <- length(data$stay)
+  p <- ncol(X) + s
   data$model <- colnames(Xm)[-1]
 
   loglik <- loglik(y, Xm, fit_fun, na)
-  crit_v <- R.utils::doCall(crit, loglik = loglik, n = n, k = k, p = p, Xm = Xm, ...)
+  crit_v <- R.utils::doCall(crit, loglik = loglik, n = n, k = k - s, p = p,
+                            Xm = Xm, ...)
   data$crit <- crit_v
 
   if (all(colnames(X)[candidates] %in% colnames(Xm))) {
@@ -64,8 +66,9 @@ forward <- function(data, crit = mbic, ...) {
     for (i in seq_along(vars)) {
       Xm_new <- cbind(Xm, XX[, i, drop = FALSE])
       loglik <- loglik(y, Xm_new, fit_fun, na)
-      crit_v_new[vars[i]] <- R.utils::doCall(crit, loglik = loglik, n = n, k = k + 1,
-                                             p = p, Xm = Xm_new, ...)
+      crit_v_new[vars[i]] <- R.utils::doCall(crit, loglik = loglik, n = n,
+                                             k = k + 1 - s, p = p, Xm = Xm_new,
+                                             ...)
     }
   }
 
@@ -76,7 +79,8 @@ forward <- function(data, crit = mbic, ...) {
     data$metric_v <- metric(data)
     if (verb & !data$stepwise)
       message("Variable ", colnames(X)[add], " added with crit = ",
-              round(crit_v_new[add], 2), ", ", metric, " = ", round(data$metric_v, 2), ".")
+              round(crit_v_new[add], 2), ", ", metric, " = ",
+              round(data$metric_v, 3), ".")
   } else {
     if (verb & !data$stepwise) message("There are no variables reducing crit.")
     data$crit <- crit_v

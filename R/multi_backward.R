@@ -44,12 +44,13 @@ multi_backward <- function(data, crit = mbic, ...) {
   }
 
   loglik <- loglik(y, Xm, fit_fun, na)
-  crit_v <- R.utils::doCall(crit, loglik = loglik, n = n, k = k, p = p, Xm = Xm, ...)
+  crit_v <- R.utils::doCall(crit, loglik = loglik, n = n, k = k - s, p = p,
+                            Xm = Xm, ...)
   data$crit <- crit_v
 
   if (verb)
     message("Starting the multi-backward, ", k - 1, " variables, crit = ",
-            round(crit_v, 2), ", ", metric, " = ", round(metric(data), 2), ".")
+            round(crit_v, 2), ", ", metric, " = ", round(metric(data), 3), ".")
 
   while (k > s) {
     data_new <- backward(data, crit, ...)

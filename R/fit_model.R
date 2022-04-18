@@ -24,8 +24,10 @@ metric <- function(data) {
     model <- speedglm.wfit(y, Xm, family = binomial())
     y_pred <- Xm %*% model$coefficients
     y_pred <- 1 / (1 + exp(-y_pred))
-    y_pred <- round(y_pred)
-    metric_v <- mean(y == y_pred)
+    logloss <- y * log(y_pred) + (1-y) * log(1-y_pred)
+    metric_v <- -mean(logloss)
+    # y_pred <- round(y_pred)
+    # metric_v <- mean(y == y_pred)
 
   } else if (data$type == "poisson") {
     model <- speedglm.wfit(y, Xm, family = poisson())

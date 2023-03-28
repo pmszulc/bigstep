@@ -89,11 +89,11 @@
 #' y <- read.table("y.txt")
 #' # data <- prepare_data(y, Xbig) # slow because of checking NA
 #' data <- prepare_data(y, Xbig, na = FALSE) # set if you know that you do not have NA
-#' data %>%
+#' m <- data %>%
 #'   reduce_matrix(minpv = 0.001) %>%
 #'   fast_forward(crit = bic, maxf = 50) %>%
 #'   multi_backward(crit = mbic) %>%
-#'   stepwise(crit = mbic) -> m
+#'   stepwise(crit = mbic)
 #' summary(m)
 #'
 #' # more examples: type browseVignettes("bigstep")
@@ -102,7 +102,6 @@
 #' @docType package
 #' @name bigstep
 #' @importFrom RcppEigen fastLmPure
-#' @importFrom speedglm speedglm.wfit
 #' @importFrom stats complete.cases binomial poisson
 #' @importFrom stats cor glm lm sd
 

@@ -5,6 +5,10 @@ colnames(X) <- c("a", "b", "c")
 y <- 1:4
 Xm <- matrix(11:18, ncol = 2)
 
+Xlong <- matrix(1:4e6, ncol = 2)
+colnames(Xlong) <- c("a", "b")
+ylong <- 1:2e6
+
 test_that("Prepare data", {
   d <- prepare_data(y, X)
   expect_s3_class(d, "big")
@@ -24,27 +28,25 @@ test_that("Prepare data", {
   expect_null(d$model)
   expect_equal(d$fit_fun, fit_linear)
   expect_true(d$verbose)
+})
 
-  X <- unname(X)
-  y <- as.numeric(y > median(y))
-  y[2] <- NA
-  d <- prepare_data(as.data.frame(y), X, type = "logistic", candidates = 3:1,
-                    maxp = 8, Xadd = Xm)
-  expect_equal(unname(d$X), X[-2, ])
-  expect_equal(colnames(d$X), as.character(1:3))
-  expect_equal(d$y, y[-2])
-  expect_equal(d$type, "logistic")
-  expect_equal(d$candidates, 3:1)
-  expect_equal(unname(d$Xm), cbind(1, Xm[-2, ]))
+test_that("Prepare data -- Xlong", {
+  d <- prepare_data(ylong, Xlong, maxp = 2e6)
+  expect_s3_class(d, "big")
+  expect_equal(d$X, Xlong)
+  expect_equal(d$y, ylong)
+  expect_equal(d$type, "linear")
+  expect_equal(d$candidates, 1:2)
+  expect_null(d$model)
   expect_false(d$na)
-  expect_equal(d$maxp, 8)
+  expect_equal(d$maxp, 2e6)
   expect_null(d$crit)
-  expect_equal(d$metric, "ACC")
+  expect_equal(d$metric, "MSE")
   expect_null(d$metric_v)
-  expect_equal(d$stepwise, FALSE)
-  expect_equal(d$stay, 1:3)
-  expect_equal(d$model, c("Xadd1", "Xadd2"))
-  expect_equal(d$fit_fun, fit_logistic)
+  expect_false(d$stepwise)
+  expect_equal(d$stay, 1)
+  expect_null(d$model)
+  expect_equal(d$fit_fun, fit_linear)
   expect_true(d$verbose)
 })
 

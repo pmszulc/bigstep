@@ -76,13 +76,7 @@ prepare_data <- function(y, X, type = "linear", candidates = NULL, Xadd = NULL,
 
   # type
   stopifnot(type %in% c("linear", "logistic", "poisson"))
-  if (type == "logistic") {
-    fit_fun <- fit_logistic
-  } else if (type == "poisson") {
-    fit_fun <- fit_poisson
-  } else {
-    fit_fun <- fit_linear
-  }
+  fit_fun <- fit_linear
 
   # candidates
   if (is.null(candidates)) candidates <- 1:p
@@ -109,7 +103,7 @@ prepare_data <- function(y, X, type = "linear", candidates = NULL, Xadd = NULL,
 
   # others
   crit <- NULL
-  metric <- ifelse(type == "logistic", "ACC", "MSE")
+  metric <- "MSE"
   metric_v <- NULL
   stepwise <- FALSE
   stay <- 1:ncol(Xm)
@@ -138,7 +132,7 @@ prepare_data <- function(y, X, type = "linear", candidates = NULL, Xadd = NULL,
 
 # checking if there are any NA values in X matrix
 check_na <- function(X, maxp = 1e6) {
-  parts <- create_parts(1:ncol(X), nrow(X))
+  parts <- create_parts(1:ncol(X), nrow(X), maxp)
   for (j in seq_along(parts)) {
     vars <- parts[[j]]
     XX <- X[, vars, drop = FALSE]

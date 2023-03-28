@@ -161,40 +161,6 @@ test_that("Bigmemory", {
 #     fast_forward(crit = bic, maxf = 50)
 # })
 
-test_that("GLM", {
-  set.seed(1)
-  n <- 200
-  p <- 200
-  X <- matrix(rnorm(n * p), ncol = p)
-  mu <- 1 - 0.85 * X[, 10] + X[, 20] - X[, 30] + 2 * X[, 40]
-  p <- 1 / (1 + exp(-mu))
-  y <- rbinom(n, 1, p)
-  d1 <- reduce_matrix(prepare_data(y, X, type = "linear", verbose = FALSE))
-  d2 <- reduce_matrix(prepare_data(y, X, type = "logistic", verbose = FALSE))
-  expect_equal(stepwise(d1)$model, c("40", "30"))
-  expect_equal(stepwise(d2)$model, c("40", "30", "20", "10"))
-
-  d2$verbose <- FALSE
-  d2 %>%
-    reduce_matrix() %>%
-    fast_forward() %>%
-    multi_backward() -> m
-  m$model
-  expect_equal(m$model, c("40", "30", "20", "10"))
-
-  y <- rpois(n, exp(mu))
-  d1 <- reduce_matrix(prepare_data(y, X, type = "linear", verbose = FALSE), minpv = 0.56)
-  d2 <- reduce_matrix(prepare_data(y, X, type = "poisson", verbose = FALSE), minpv = 0.56)
-  # p for correlation between y and X[, 10] is only 0.55
-  expect_equal(stepwise(d1)$model, "40")
-  expect_equal(stepwise(d2)$model, c("40", "20", "30", "10"))
-  # d2 %>%
-  #   reduce_matrix() %>%
-  #   fast_forward() %>%
-  #   multi_backward()
-  # sometimes fast_forward is not a good idea
-})
-
 test_that("NA", {
   X[1, 1] <- NA
   X[2, 6] <- NA

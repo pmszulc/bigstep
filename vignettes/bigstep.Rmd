@@ -45,6 +45,7 @@ Then, you can use the stepwise procedure with, for example, Akaike Information C
 ```{r}
 results <- stepwise(data, crit = aic)
 results$model
+get_model(results) # object of class `lm`
 summary(results)
 ```
 
@@ -99,7 +100,7 @@ data %>%
   stepwise(bic) # bad idea...
 ```
 
-Sometimes it will be reasonable to start with a model with some good predictors and then use the stepwise procedure. It can be achieved if we use `fast_forward` which adds every variable that reduces a criterion (not necessarily the best one). It is important for that function to search for variables in a reasonable order (first, the most correlated with `y`), so you should use `fast_forward` after `reduce_matrix` (you can set `minpv = 1` if you do not want to remove any predictor, just change the order). It is good idea to run `fast_forward` with a criterion which does not have a heavy penalty for the size of a model, so for example BIC is better than mBIC. After adding a lot of variables, most of them will be useless, so it can be a good idea to perform the backward elimination---as long as there are variables reducing a criterion. Run `multi_bacward` to do that.
+Sometimes it will be reasonable to start with a model with some good predictors and then use the stepwise procedure. It can be achieved if we use `fast_forward` which adds every variable that reduces a criterion (not necessarily the best one). It is important for that function to search for variables in a reasonable order (first, the most correlated with `y`), so you should use `fast_forward` after `reduce_matrix` (you can set `minpv = 1` if you do not want to remove any predictor, just change the order). It is good idea to run `fast_forward` with a criterion which does not have a heavy penalty for the size of a model, so for example BIC is better than mBIC. After adding a lot of variables, most of them will be useless, so it can be a good idea to perform the backward elimination---as long as there are variables reducing a criterion. Run `multi_backward` to do that.
 
 ```{r}
 data %>%
@@ -151,40 +152,20 @@ Because your criterion has access to a model matrix (`Xm`), you can use untypica
 
 ## General linear models
 
-The package allows you to fit logistic and Poisson models. All you need to do is setting the parameter `type` when you prepare data. Take note that the `reduce_matrix` function always calculates the Pearson correlation, even if you use general linear models.
+The package allows you to fit logistic and Poisson models. All you need to do is setting the parameter `type` when you prepare data. In the previous version, `bigstep` used the `speedglm` package to fit models. Unfortunately, this package has been removed from CRAN. Currently, at the model selection stage, the `type` parameter is ignored, i.e. bigstep looks for the best set of variables, fitting a linear regression model. Only at the end is the appropriate glm model fitted. Fortunately, this does not make much difference in practice. It is a known fact that even if one is interested in a logistic regression model, the stepwise regression can be performed based on linear regression --- the same variables will be selected (and the whole procedure is faster).
 
 ```{r}
-# Poisson model
-set.seed(1)
-n <- 50
-p <- 1000
-X <- matrix(runif(n * p), ncol = p)
-colnames(X) <- paste0("X", 1:p)
-mu <- rowSums(X[, 100 * (1:5)])
-y <- rpois(n, exp(mu))
-data1 <- prepare_data(y, X, type = "linear")
-data2 <- prepare_data(y, X, type = "poisson")
-data1 %>%
-  reduce_matrix() %>%
-  stepwise() # did not see any variables
-data2 %>%
-  reduce_matrix() %>%
-  stepwise()
-
 # logistic model
 set.seed(2)
 n <- 100
 X <- matrix(runif(n * p, -5, 5), ncol = p)
 colnames(X) <- paste0("X", 1:p)
-mu <- 0.8 * rowSums(X[, 100 * (1:5)])
+mu <- rowSums(X[, 100 * (1:5)])
 prob <- 1 /( 1 + exp(-mu))
 y <- rbinom(n, 1, prob)
-data1 <- prepare_data(y, X, type = "linear")
-data2 <- prepare_data(y, X, type = "logistic")
-data1 %>%
+data <- prepare_data(y, X, type = "logistic")
+m_log <- data %>%
   reduce_matrix() %>%
   stepwise()
-data2 %>%
-  reduce_matrix() %>%
-  stepwise()
+summary(m_log) # glm
 ```

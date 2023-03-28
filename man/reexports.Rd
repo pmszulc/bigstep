@@ -13,8 +13,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{bigmemory}{\code{\link[bigmemory]{read.big.matrix}}, \code{\link[bigmemory]{attach.big.matrix}}}
+  \item{bigmemory}{\code{\link[bigmemory]{attach.big.matrix}}, \code{\link[bigmemory:write.big.matrix]{read.big.matrix}}}
 
-  \item{magrittr}{\code{\link[magrittr]{\%>\%}}}
+  \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
 }}
 

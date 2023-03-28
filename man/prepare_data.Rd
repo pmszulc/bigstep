@@ -4,8 +4,16 @@
 \alias{prepare_data}
 \title{Data preparation}
 \usage{
-prepare_data(y, X, type = "linear", candidates = NULL, Xadd = NULL,
-  na = NULL, maxp = 1e+06, verbose = TRUE)
+prepare_data(
+  y,
+  X,
+  type = "linear",
+  candidates = NULL,
+  Xadd = NULL,
+  na = NULL,
+  maxp = 1e+06,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{y}{a numeric vector of dependent (target) variable.}

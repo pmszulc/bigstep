@@ -160,9 +160,9 @@ matrix `X`, check all variables from that part and then read another
 one. To do that, you only need to read the matrix `X` using
 `read.big.matrix` from `bigmemory` package. The `prepare_data` function
 has a parameter `maxp` which represents the maximum size (that is the
-number of elements) of one part. If `X` is bigger, it will be splitted.
-It will be done even if your matrix is big but you have enough RAM to
-read it in a normal way. It may seem unnecessary, but it is worth to do
+number of elements) of one part. If `X` is bigger, it will be split. It
+will be done even if your matrix is big but you have enough RAM to read
+it in a normal way. It may seem unnecessary, but it is worth to do
 because R is not very efficient in dealing with big matrices. Remember
 that `maxp` cannot be smaller than the number of observations (rows in
 `X`), by default it is 1e6.

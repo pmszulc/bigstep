@@ -26,7 +26,7 @@ package, you only need to read the matrix \code{X} using
 \code{read.big.matrix} from \code{bigmemory} package. The \code{prepare_data}
 function has a parameter \code{maxp} which represents the maximum size (that
 is the number of elements) of one part. If \code{X} is bigger, it will be
-splitted. It will be done even if your matrix is big but you have enough RAM
+split. It will be done even if your matrix is big but you have enough RAM
 to read it in a normal way. It may seem unnecessary, but it is worth to do
 because R is not very efficient in dealing with big matrices.
 

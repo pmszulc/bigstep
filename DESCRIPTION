@@ -1,16 +1,16 @@
 Package: bigstep
 Type: Package
 Title: Stepwise Selection for Large Data Sets
-Version: 1.0.3
-Date: 2019-7-17
+Version: 1.1.0
+Date: 2023-3-28
 Authors@R: person("Piotr", "Szulc", email = "piotr.michal.szulc@gmail.com", role = c("aut", "cre"))
 Description: Selecting linear and generalized linear models for large data sets
     using modified stepwise procedure and modern selection criteria (like
     modifications of Bayesian Information Criterion). Selection can be
     performed on data which exceed RAM capacity.
 License: GPL-3
-URL: http://github.com/pmszulc/bigstep
-BugReports: http://github.com/pmszulc/bigstep/issues
+URL: https://github.com/pmszulc/bigstep
+BugReports: https://github.com/pmszulc/bigstep/issues
 Depends: R (>= 3.5.0)
 Imports: bigmemory,
     magrittr,

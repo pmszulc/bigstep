@@ -20,9 +20,24 @@ metric <- function(data) {
     y <- y[compl]
   }
 
-  model <- fastLmPure(Xm, y)
-  y_pred <- model$fitted.values
-  metric_v <- mean((y - y_pred)^2)
+  if (data$type == "logistic") {
+    model <- speedglm.wfit(y, Xm, family = binomial())
+    y_pred <- Xm %*% model$coefficients
+    y_pred <- 1 / (1 + exp(-y_pred))
+    y_pred <- round(y_pred)
+    metric_v <- mean(y == y_pred)
+
+  } else if (data$type == "poisson") {
+    model <- speedglm.wfit(y, Xm, family = poisson())
+    y_pred <- Xm %*% model$coefficients
+    y_pred <- exp(y_pred)
+    metric_v <- mean((y - y_pred)^2)
+
+  } else {
+    model <- fastLmPure(Xm, y)
+    y_pred <- model$fitted.values
+    metric_v <- mean((y - y_pred)^2)
+  }
 
   return(metric_v)
 }
@@ -106,7 +121,7 @@ summary.big <- function(object, ...) {
   return(summary_v)
 }
 
-# Fitting function
+# Fitting functions
 fit_linear <- function(y, X) {
   model <- fastLmPure(X, y, method = 3)
   rss <- sum(model$residuals^2)
@@ -115,3 +130,14 @@ fit_linear <- function(y, X) {
   return(loglik)
 }
 
+fit_logistic <- function(y, X) {
+  model <- speedglm.wfit(y, X, family = binomial())
+  loglik <- model$logLik
+  return(loglik)
+}
+
+fit_poisson <- function(y, X) {
+  model <- speedglm.wfit(y, X, family = poisson())
+  loglik <- model$logLik
+  return(loglik)
+}

@@ -87,17 +87,37 @@ knitr::opts_chunk$set(
 #  stepwise(m, crit = function(loglik, k, n) -0.4*loglik + 10*sqrt(k*8))
 
 ## -----------------------------------------------------------------------------
+#  # Poisson model
+#  set.seed(1)
+#  n <- 50
+#  p <- 1000
+#  X <- matrix(runif(n * p), ncol = p)
+#  colnames(X) <- paste0("X", 1:p)
+#  mu <- rowSums(X[, 100 * (1:5)])
+#  y <- rpois(n, exp(mu))
+#  data1 <- prepare_data(y, X, type = "linear")
+#  data2 <- prepare_data(y, X, type = "poisson")
+#  data1 %>%
+#    reduce_matrix() %>%
+#    stepwise() # did not see any variables
+#  data2 %>%
+#    reduce_matrix() %>%
+#    stepwise()
+#  
 #  # logistic model
 #  set.seed(2)
 #  n <- 100
 #  X <- matrix(runif(n * p, -5, 5), ncol = p)
 #  colnames(X) <- paste0("X", 1:p)
-#  mu <- rowSums(X[, 100 * (1:5)])
+#  mu <- 0.8 * rowSums(X[, 100 * (1:5)])
 #  prob <- 1 /( 1 + exp(-mu))
 #  y <- rbinom(n, 1, prob)
-#  data <- prepare_data(y, X, type = "logistic")
-#  m_log <- data %>%
+#  data1 <- prepare_data(y, X, type = "linear")
+#  data2 <- prepare_data(y, X, type = "logistic")
+#  data1 %>%
 #    reduce_matrix() %>%
 #    stepwise()
-#  summary(m_log) # glm
+#  data2 %>%
+#    reduce_matrix() %>%
+#    stepwise()
 

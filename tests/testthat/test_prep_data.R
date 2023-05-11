@@ -28,6 +28,28 @@ test_that("Prepare data", {
   expect_null(d$model)
   expect_equal(d$fit_fun, fit_linear)
   expect_true(d$verbose)
+
+  X <- unname(X)
+  y <- as.numeric(y > median(y))
+  y[2] <- NA
+  d <- prepare_data(as.data.frame(y), X, type = "logistic", candidates = 3:1,
+    maxp = 8, Xadd = Xm)
+  expect_equal(unname(d$X), X[-2, ])
+  expect_equal(colnames(d$X), as.character(1:3))
+  expect_equal(d$y, y[-2])
+  expect_equal(d$type, "logistic")
+  expect_equal(d$candidates, 3:1)
+  expect_equal(unname(d$Xm), cbind(1, Xm[-2, ]))
+  expect_false(d$na)
+  expect_equal(d$maxp, 8)
+  expect_null(d$crit)
+  expect_equal(d$metric, "ACC")
+  expect_null(d$metric_v)
+  expect_equal(d$stepwise, FALSE)
+  expect_equal(d$stay, 1:3)
+  expect_equal(d$model, c("Xadd1", "Xadd2"))
+  expect_equal(d$fit_fun, fit_logistic)
+  expect_true(d$verbose)
 })
 
 test_that("Prepare data -- Xlong", {

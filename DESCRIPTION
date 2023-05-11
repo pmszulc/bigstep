@@ -17,6 +17,7 @@ Imports: bigmemory,
     matrixStats,
     R.utils,
     RcppEigen,
+    speedglm,
     stats,
     utils
 Suggests: devtools,

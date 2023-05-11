@@ -102,6 +102,7 @@
 #' @docType package
 #' @name bigstep
 #' @importFrom RcppEigen fastLmPure
+#' @importFrom speedglm speedglm.wfit
 #' @importFrom stats complete.cases binomial poisson
 #' @importFrom stats cor glm lm sd
 

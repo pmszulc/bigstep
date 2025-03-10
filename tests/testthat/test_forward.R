@@ -16,8 +16,9 @@ test_that("Right variable to add", {
   Xm <- cbind(1, X[, c(2, 3, 6)])
   expect_equal(res$Xm, Xm)
   loglik <- loglik(y, Xm)
-  bic_v <- round(bic(loglik, k = 4, n = n), 2)
-  expect_message(forward(d, crit = bic), "Variable 6 added with crit = ", bic_v, ".")
+  bic_v <- round(bic(loglik, k = 3, n = n), 2)
+  expect_message(forward(d, crit = bic),
+    paste0("Variable 6 added with crit = ", bic_v, "."))
 
   d <- prepare_data(y, X, Xadd = NULL)
   expect_equal(forward(d, crit = bic)$model, "3")

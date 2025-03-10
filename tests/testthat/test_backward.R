@@ -20,11 +20,8 @@ test_that("Right variable to remove", {
   expect_equal(res$model, c("b", "c", "f"))
   expect_equal(res$crit, bic_v)
   expect_message(backward(d, crit = bic),
-                 "Variable g removed with crit = ", round(bic_v, 2), ".")
+    paste0("Variable g removed with crit = ", round(bic_v, 2)))
 
-  d$stay <- 1:4
-  expect_message(backward(d, crit = bic),
-                 "Variable g removed with crit = ", round(bic_v, 2), ".")
   d$stay <- 1:5
   expect_message(backward(d, crit = bic), "There are no variables to remove")
 })

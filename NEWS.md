@@ -1,3 +1,7 @@
+# bigstep 1.1.2
+
+* Fixed minor bugs in code testing functions.
+
 # bigstep 1.1.1
 
 * Restored dependence on `speedglm` package, as it returned to CRAN.
